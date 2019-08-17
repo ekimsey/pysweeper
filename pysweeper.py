@@ -53,5 +53,24 @@ class Field:
         self.sizeY = sizeY
         self.numMines = numMines
 
+class Tile:
+    x = None
+    y = None
+    mine = False
+    flag = False
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def placeMine():
+        self.mine = True
+    
+    def toggleFlag():
+        if flag:
+            flag = False
+        else:
+            flag = True
+
 if __name__ == '__main__':
     main()
