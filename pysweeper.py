@@ -23,8 +23,11 @@ def userSetup():
     # Choose width of minefield
     sizeX = None
     while (sizeX is None):
-        sizeX = int(input('How wide would you like your minefield? (2-26) '))
-        #TODO - Handle non-numbers entered
+        try:
+            sizeX = int(input('How wide would you like your minefield? (2-26) '))
+        except ValueError:
+            print('Value entered is not an integer!')
+            continue
         if sizeX < 2:
             print('Minefield must be wider than 1 cell!')
             sizeX = None
@@ -35,8 +38,11 @@ def userSetup():
     # Choose height of minefield
     sizeY = None
     while (sizeY is None):
-        sizeY = int(input('How tall would you like your minefield? (2-23) '))
-        #TODO - Handle non-numbers entered
+        try:
+            sizeY = int(input('How tall would you like your minefield? (2-23) '))
+        except ValueError:
+            print('Value entered is not an integer!')
+            continue
         if sizeY < 2:
             print('Minefield must be taller than 1 cell!')
             sizeY = None
@@ -47,8 +53,11 @@ def userSetup():
     # Choose number of mines in the minefield
     numMines = None
     while (numMines is None):
-        numMines = int(input('How many mines would you like? '))
-        #TODO - Handle non-numbers entered
+        try:
+            numMines = int(input('How many mines would you like? '))
+        except ValueError:
+            print('Value entered is not an integer!')
+            continue
         if numMines < 1:
             print('Minefield must have at least one mine!')
             numMines = None
