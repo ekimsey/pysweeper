@@ -16,6 +16,7 @@ def main():
         field = userSetup()
     
     placeMines(field)
+    determineValues(field)
     displayField(field)
     
 
@@ -77,6 +78,55 @@ def placeMines(field):
             field.minefield[y][x].placeMine()
             numMinesTmp = numMinesTmp - 1
 
+def determineValues(field):
+    for y in range(len(field.minefield)):
+        for x in range(len(field.minefield[y])):
+            if field.minefield[y][x].mine:
+                continue
+            
+            value = 0
+            # Check top-left
+            if x > 0 and y > 0:
+                if field.minefield[y-1][x-1].mine:
+                    value = value + 1
+            
+            # Check above
+            if y > 0:
+                if field.minefield[y-1][x].mine:
+                    value = value + 1
+            
+            # Check top-right
+            if x < len(field.minefield[y]) - 1 and y > 0:
+                if field.minefield[y-1][x+1].mine:
+                    value = value + 1
+            
+            # Check left
+            if x > 0:
+                if field.minefield[y][x-1].mine:
+                    value = value + 1
+            
+            # Check right
+            if x < len(field.minefield[y]) - 1:
+                if field.minefield[y][x+1].mine:
+                    value = value + 1
+            
+            # Check bottom-left
+            if x > 0 and y < len(field.minefield) - 1:
+                if field.minefield[y+1][x-1].mine:
+                    value = value + 1
+            
+            # Check below
+            if y < len(field.minefield) - 1:
+                if field.minefield[y+1][x].mine:
+                    value = value + 1
+            
+            # Check bottom-right
+            if x < len(field.minefield[y]) - 1 and y < len(field.minefield) - 1:
+                if field.minefield[y+1][x+1].mine:
+                    value = value + 1
+            
+            field.minefield[y][x].value = value
+
 def displayField(field):
     for y in range(len(field.minefield)):
         for x in range(len(field.minefield[y])):
@@ -88,7 +138,7 @@ def displayField(field):
             if field.minefield[y][x].mine:
                 print('[*]', end=ending)
             else:
-                print('[ ]', end=ending)
+                print('[' + str(field.minefield[y][x].value) + ']', end=ending)
 
 class Field:    
     def __init__(self, sizeX, sizeY, numMines):
@@ -108,6 +158,8 @@ class Tile:
         self.y = y
         self.mine = False
         self.flag = False
+        self.revealed = False
+        self.value = None
     
     def placeMine(self):
         self.mine = True
