@@ -1,3 +1,5 @@
+# Eric Kimsey
+# 2019
 # Python implementation of Minesweeper
 
 import random, argparse
