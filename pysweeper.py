@@ -11,6 +11,7 @@ def main():
         sizeX = random.randrange(2, 26)
         sizeY = random.randrange(2, 23)
         numMines = random.randrange(1, round((sizeX * sizeY) / 2))
+        print(str(sizeX) + ' x ' + str(sizeY) + ' with ' + str(numMines) + ' mines')
         field = Field(sizeX, sizeY, numMines)
     else:
         field = userSetup()
@@ -18,7 +19,6 @@ def main():
     placeMines(field)
     determineValues(field)
     displayField(field)
-    
 
 def userSetup():
     # Choose width of minefield
@@ -135,10 +135,38 @@ def displayField(field):
             else:
                 ending = ''
 
-            if field.minefield[y][x].mine:
-                print('[*]', end=ending)
+            if field.minefield[y][x].revealed:
+                if field.minefield[y][x].mine:
+                    print('[*]', end=ending)
+                else:
+                    print('[' + str(field.minefield[y][x].value) + ']', end=ending)
             else:
-                print('[' + str(field.minefield[y][x].value) + ']', end=ending)
+                print('[ ]', end=ending)
+
+def depthFirstSearch(field, x, y):
+    # Check above
+    if y > 0:
+        if field.minefield[y-1][x].value == 0 and not field.minefield[y-1][x].revealed:
+            field.minefield[y-1][x].revealed = True
+            depthFirstSearch(field, x, y-1)
+    
+    # Check left
+    if x > 0:
+        if field.minefield[y][x-1].value == 0 and not field.minefield[y][x-1].revealed:
+            field.minefield[y][x-1].revealed = True
+            depthFirstSearch(field, x-1, y)
+    
+    # Check right
+    if x < len(field.minefield[y]) - 1:
+        if field.minefield[y][x+1].value == 0 and not field.minefield[y][x+1].revealed:
+            field.minefield[y][x+1].revealed = True
+            depthFirstSearch(field, x+1, y)
+    
+    # Check below
+    if y < len(field.minefield) - 1:
+        if field.minefield[y+1][x].value == 0 and not field.minefield[y+1][x].revealed:
+            field.minefield[y+1][x].revealed = True
+            depthFirstSearch(field, x, y+1)
 
 class Field:    
     def __init__(self, sizeX, sizeY, numMines):
