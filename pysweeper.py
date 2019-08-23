@@ -20,7 +20,14 @@ def main():
     
     placeMines(field)
     determineValues(field)
-    displayField(field)
+
+    while True:
+        displayField(field)
+        if not field.end:
+            getUserInput(field)
+        else:
+            print('GAME OVER')
+            break
 
 def userSetup():
     # Choose width of minefield
@@ -170,12 +177,39 @@ def depthFirstSearch(field, x, y):
             field.minefield[y+1][x].revealed = True
             depthFirstSearch(field, x, y+1)
 
+def getUserInput(field):
+    while True:
+        try:
+            userX = int(input('Choose X coordinate: '))
+            userY = int(input('Choose Y coordinate: '))
+        except ValueError:
+            print('Value entered is not an integer!')
+            continue
+        
+        if userX < 0 or userX > len(field.minefield[0]) - 1 or userY < 0 or userY > len(field.minefield) - 1:
+            print('Value entered is out of range!')
+            continue
+        
+        if not field.minefield[userY][userX].revealed:
+            field.minefield[userY][userX].revealed = True
+            if field.minefield[userY][userX].mine:
+                field.end = True
+            if field.minefield[userY][userX].value == 0:
+                depthFirstSearch(field, userX, userY)
+        else:
+            print('This tile has already been revealed!')
+            continue
+        
+        break
+
 class Field:    
     def __init__(self, sizeX, sizeY, numMines):
         self.sizeX = sizeX
         self.sizeY = sizeY
         self.numMines = numMines
+        self.revealedMines = 0
         self.minefield = [[None for x in range(sizeX)] for y in range(sizeY)]
+        self.end = False
 
         for j in range(sizeY):
             for i in range(sizeX):
