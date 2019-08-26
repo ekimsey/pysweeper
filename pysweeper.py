@@ -24,7 +24,7 @@ def main():
         minefield = [[None for x in range(sizeX)] for y in range(sizeY)]
         for y in range(len(field.minefield)):
             for x in range(len(field.minefield[y])):
-                btn = Button(window)
+                btn = Button(window, command=lambda t=field.minefield[y][x]: tileClicked(t))
                 btn.grid(column=x, row=y)
                 minefield[y][x] = btn
     else:
@@ -220,6 +220,9 @@ def getUserInput(field):
             continue
         
         break
+
+def tileClicked(tile):
+    print('Tile: ' + str(tile.x) + ', ' + str(tile.y))
 
 class Field:    
     def __init__(self, sizeX, sizeY, numMines):
