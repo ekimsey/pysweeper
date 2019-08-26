@@ -3,11 +3,15 @@
 # Python implementation of Minesweeper
 
 import random, argparse
+from tkinter import Tk, Button
 
 def main():
     parser = argparse.ArgumentParser(description='A Python implementation of Minesweeper.')
     parser.add_argument('-r', '--random', action='store_true', help='Generate a random minefield.')
     args = parser.parse_args()
+
+    window = Tk()
+    window.title("Pysweeper")
     
     if args.random:
         sizeX = random.randrange(2, 26)
@@ -15,12 +19,26 @@ def main():
         numMines = random.randrange(1, round((sizeX * sizeY) / 2))
         print(str(sizeX) + ' x ' + str(sizeY) + ' with ' + str(numMines) + ' mines')
         field = Field(sizeX, sizeY, numMines)
+        
+        # Create GUI grid
+        minefield = [[None for x in range(sizeX)] for y in range(sizeY)]
+        for y in range(len(field.minefield)):
+            for x in range(len(field.minefield[y])):
+                btn = Button(window)
+                btn.grid(column=x, row=y)
+                minefield[y][x] = btn
     else:
-        field = userSetup()
-    
-    placeMines(field)
-    determineValues(field)
+        # TODO - Need to rework for GUI.
+        #field = userSetup()
+        pass
 
+    window.mainloop()
+    exit()
+    
+    #placeMines(field)
+    #determineValues(field)
+
+    '''
     while True:
         displayField(field)
         if not field.end:
@@ -28,6 +46,7 @@ def main():
         else:
             print('GAME OVER')
             break
+    '''
 
 def userSetup():
     # Choose width of minefield
